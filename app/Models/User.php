@@ -17,11 +17,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
    // private $clientBaseUrl= 'https://spa.test/reset-password?token=';
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $fillable = [ 'name','user_name','phone_number','interest'=>'Array', 'email',  'password'];
 
     protected $hidden = [
         'password',
@@ -31,6 +27,10 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
+    
+    public function sports()
+    {
+        return $this->belongsToMany(Sport::class);
+    }
   
 }

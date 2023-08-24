@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom"
-import {useRef, createRef, useState} from "react";
+import { Link, useNavigate} from "react-router-dom"
+import {useRef, useEffect, useState} from "react";
 import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios-client";
 
@@ -7,8 +7,21 @@ import axiosClient from "../axios-client";
 export default function Login(){
   const emailRef = useRef()
   const passwordRef = useRef()
-  const{setUser, setToken } = useStateContext()
+  const{ user,setUser, setToken, } = useStateContext()
   const [errors, setErrors] = useState(null)
+  const [notificationError, setError] = useState(null)
+  const navigate = useNavigate();
+ 
+
+    //   useEffect(() => {
+    //     if (user && user.email_verified_at ==null) {
+     // axiosClient.post('/logout')
+    //      .then(() =>{
+        // setUser({})
+        // setToken(null)
+        //   })
+    //     }
+    // }, [user]);
 
     const onSubmit = (ev) => {
         ev.preventDefault()
@@ -18,19 +31,32 @@ export default function Login(){
            password:passwordRef.current.value,
        }
           setErrors(null)
-
+          setError(null)
            axiosClient.post('/login', payload)
            .then(({data})  =>{
-               setUser(data.user)
-               setToken(data.token)
+              if(data.verified){
+                setUser(data.user)
+                setToken(data.token)
+               navigate('/dashboard')
+              }else{
+                setError("Email not verified!")
+                setUser(null)
+                setToken(null)
+              } 
+              
            }) 
            .catch(err => {
               // console.log(err)
                const response = err.response;
                if(response && response.status === 422){
                   setErrors(response.data.errors);
-               
                } 
+               if(response && response.status === 402){
+                setError('Please check your email for verification link');
+                } 
+               if(response && response.status === 401){
+                setError('invalid login credientials');
+             } 
            })
     }
 
@@ -43,14 +69,20 @@ export default function Login(){
                     Login into your account
                 </h1>
                 
-                {errors && <div className="alert">
+                {errors && 
+                <div className="alert">
                 {Object.keys(errors).map(key => (
                     <p key={key}>{errors[key][0]}</p>
                 ))}
                 </div>}
+                {notificationError && 
+                <div className="alert">
+                    <p>{notificationError}</p>
+                </div>}
 
-            <input  ref={emailRef} type="email"  placeholder="Email"/>
+            <input ref={emailRef} type="email"  placeholder="Email"/>
             <input  ref={passwordRef} type="password"  placeholder="password"/>
+            <p className="">forgot password? <Link to="/password-reset">Reset here</Link></p>
             <button className="btn btn-block" > Login</button> 
             <p className="message">
                 Not Registered? <Link to="/signup"> Create an account</Link>

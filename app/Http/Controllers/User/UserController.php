@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User;
+use App\Models\Sport;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 
  
@@ -11,6 +13,15 @@ use App\Http\Controllers\Controller;
 class UserController extends Controller
 {
 
+
+    
+    public function __construct()
+    {
+     $this->middleware('admin')->only([ 'index','delete'  ]);
+   
+    }
+
+    // get all user
     public function index() {
       $allUser = User::all();
        return response()->json( ['user' => $allUser,'status'=>true], 200);
@@ -21,6 +32,32 @@ class UserController extends Controller
     public function show(Request $request ) {
        $user = User::find($request->id);
         return response()->json(['user'=>$user,'status'=>true],200);
+    }
+
+    //update a user
+    public function update(Request $request)
+    {
+            $request->validate([
+            'name' => 'string',
+            'user_name' => 'string',
+            'email' => 'string',
+            'interest' => 'nullable'
+            
+        ]);
+
+        $user =  User::find($request->id);
+        $user->name = $request->name;
+        $user->user_name = $request->user_name;
+        $user->email = $request->email;
+
+        $user->save();
+        if ($request->has('interest')) {
+            $interest = Sport::whereIn('id', $request->interest)->get();
+            $user->sports()->sync($interest);
+        } else {
+            $user->sports()->detach();
+        }
+        return response()->json(['message' => 'user Update successful.',], 201); 
     }
 
     

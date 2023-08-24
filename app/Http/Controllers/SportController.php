@@ -8,6 +8,15 @@ use Illuminate\Http\Request;
 
 class SportController extends Controller
 {
+
+
+     
+    public function __construct()
+    {
+     $this->middleware('admin')->only([ 'update','store','delete' ]);
+   
+    }
+
     public function index(){
         $sports = Sport::all();
         return response()->json(['sports'=>$sports, 'status'=>true],200);

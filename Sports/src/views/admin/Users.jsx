@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import axiosClient from "../axios-client.js";
+import axiosClient from "../../axios-client.js";
 import { Link } from "react-router-dom";
 //import {useStateContext} from "../context/ContextProvider.jsx";
 
@@ -86,7 +86,13 @@ const getUsers = () => {
 
                 ))}
               </tbody>
-              ) : (loading
+              ) : (<tbody>
+                <tr>
+                  <td colSpan="5" className="text-center"> 
+                  Loading...
+                  </td>
+                </tr>
+              </tbody>
                 )}
             </table>
           </div>

@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
-import axiosClient from "../axios-client.js";
+import axiosClient from "../../axios-client.js";
 import { useNavigate, useParams } from "react-router-dom";
-import { useStateContext } from "../contexts/ContextProvider.jsx";
+import { useStateContext } from "../../contexts/ContextProvider.jsx";
 
 
 export default function SportForm(){

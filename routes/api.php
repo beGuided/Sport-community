@@ -27,20 +27,20 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::post('password/forgot-password', [NewPasswordController::class, 'forgotPassword']);
     Route::post('password/reset', [NewPasswordController::class, 'reset']);
-
     Route::get('/email/verify-email/{id}/{hash}', [AuthController::class, 'verifyEmail'])->name('verification.verify')->middleware(['signed',]);
-
+    Route::get('/sports', [SportController::class, 'index']);
 
 });
 
- Route::group(  ['middleware'=> ['auth:sanctum'],  'prefix' => 'v1' ], function () {  
+ Route::group(  ['middleware'=> ['auth:sanctum',],  'prefix' => 'v1' ], function () {  
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/{id}', [UserController::class, 'show']);
+    Route::patch('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'delete']);
     
-    Route::get('/sports', [SportController::class, 'index']);
+
     Route::get('/sports/{id}', [SportController::class, 'show']);
     Route::post('/sports', [SportController::class, 'store']);
     Route::patch('/sports/{id}', [SportController::class, 'update']);

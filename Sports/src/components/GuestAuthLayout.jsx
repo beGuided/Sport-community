@@ -5,12 +5,12 @@ import { useStateContext } from "../contexts/ContextProvider";
 
 
 
-export default function GuestLayouth(){
+export default function GuestAuthLayouth(){
 
-    const {token} = useStateContext();
+    const {token,user} = useStateContext();
    
-    if(token){
-        return <Navigate to="/" />
+    if(token && user.email_verified_at!==null){
+        return <Navigate to='/' />
     }
 
     return (
