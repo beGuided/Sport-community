@@ -1,5 +1,7 @@
-import {Outlet,Navigate} from "react-router-dom";
+import {Outlet,Link,Navigate} from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
+import axiosClient from "../axios-client";
+import {useEffect} from "react"
 
 
 
@@ -7,11 +9,30 @@ import { useStateContext } from "../contexts/ContextProvider";
 
 export default function GuestAuthLayouth(){
 
-    const {token, user} = useStateContext();
+    const {user, setUser,setToken}  = useStateContext();
    
-    // if(token && user.email_verified_at!==null){
-    //     return <Navigate to='/' />
-    // }
+  
+    const onLogout = (ev) =>{
+        ev.preventDefault()
+    
+        axiosClient.post('/logout')
+        .then(() =>{
+            setUser({})
+            setToken(null)
+        })
+    }
+    useEffect(() => {
+        async function fetchUser() {
+            try {
+                const response = await axiosClient.get('/user'); 
+                const data = await response
+                setUser(data.data);
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        }
+        fetchUser();
+    }, []);
 
     return (
         < div>
@@ -26,21 +47,50 @@ export default function GuestAuthLayouth(){
                 <div className="container">
                     {/* <img src="images/logo.png" className="img-fluid nav-logo-desktop" alt="Company Logo"> */}
                     <ul className="navbar-nav ml-auto nav-right" data-easing="easeInOutExpo" data-speed="1250" data-offset="65">
+                   
+                   {/* only display if user is a veriefed user */}
+                   {user.email_verified_at !== null &&
                     <li className="nav-item nav-custom-link">
-                        <a className="nav-link" href="index.html">Home <i className="icon ion-ios-arrow-forward icon-mobile"></i></a>
+                        <a className="nav-link" href="/dashboard">Profile <i className="icon ion-ios-arrow-forward icon-mobile"></i></a>
+                    </li>
+                   }
+                    
+                    <li className="nav-item nav-custom-link">
+                        <a className="nav-link" href="#">Buddies <i className="icon ion-ios-arrow-forward icon-mobile"></i></a>
                     </li>
                     <li className="nav-item nav-custom-link">
-                        <a className="nav-link" href="#marketing">Features <i className="icon ion-ios-arrow-forward icon-mobile"></i></a>
+                        <a className="nav-link" href="#testimonials">Discover <i className="icon ion-ios-arrow-forward icon-mobile"></i></a>
                     </li>
+                   {/* only display if user is a veriefed user */}
+                   
+                    {user.email_verified_at !== null &&
                     <li className="nav-item nav-custom-link">
-                        <a className="nav-link" href="#testimonials">Testimonials <i className="icon ion-ios-arrow-forward icon-mobile"></i></a>
+                        {user?(
+                    <h1>{user.user}</h1>
+                   ):(
+                    <p>empty</p>
+                   )}
+                        <Link className="nav-link" to={'/users/'+user.id}>Settings & Privacy<i className="icon ion-ios-arrow-forward icon-mobile"></i></Link> 
                     </li>
-                    <li className="nav-item nav-custom-link">
-                        <a className="nav-link" href="#pricing">Pricing <i className="icon ion-ios-arrow-forward icon-mobile"></i></a>
-                    </li>
+                        }
+                   {/* only display if user is not veriefed user */}
+                    
+                   {user.email_verified_at ==undefined &&
                     <li className="nav-item nav-custom-link btn btn-demo-small">
-                        <a className="nav-link" href="#">Try for Free <i className="icon ion-ios-arrow-forward icon-mobile"></i></a>
+                    <a className="nav-link" href="/signup">SignUp <i className="icon ion-ios-arrow-forward icon-mobile"></i></a>
                     </li>
+                    }
+                    {user.email_verified_at !=undefined &&
+                    <li className="nav-item nav-custom-link btn btn-demo-small">
+                    <a className="nav-link" href="#"  onClick={onLogout}>LogOut <i className="icon ion-ios-arrow-forward icon-mobile"></i></a>
+                    </li>
+                    }
+                    
+
+
+                   {/* only display if user is a veriefed user */}
+                  
+                    
                     </ul>
                 </div>
                 </div>
@@ -52,41 +102,8 @@ export default function GuestAuthLayouth(){
             <footer>
                 <div className="container">
                 <div className="row">
-                    <div className="col-md-3">
-                    <h5>Seo Ranking</h5>
-                    <ul>
-                        <li><a href="#">Pricing</a></li>
-                        <li><a href="#">Affiliate Program</a></li>
-                        <li><a href="#">Developer API</a></li>
-                        <li><a href="#">Support</a></li>
-                        <li><a href="#">Video Tutorials</a></li>
-                    </ul>
-                    </div>
-                    <div className="col-md-3">
-                    <h5>Main Tools</h5>
-                    <ul>
-                        <li><a href="#">Rank Tracker</a></li>
-                        <li><a href="#">Backlink Checker</a></li>
-                        <li><a href="#">Keyword Generator</a></li>
-                        <li><a href="#">Serp Checker</a></li>
-                        <li><a href="#">Site Audit</a></li>
-                    </ul>
-                    </div>
-                    <div className="col-md-3">
-                    <h5>Blog</h5>
-                    <ul>
-                        <li><a href="#">Get High Quality Backlinks</a></li>
-                        <li><a href="#">Top Google Searches</a></li>
-                        <li><a href="#">Avoid Google Penalties</a></li>
-                        <li><a href="#">White Hat SEO Tips</a></li>
-                        <li><a href="#">Google Trends</a></li>
-                    </ul>
-                    </div>
-                    <div className="col-md-3">
-                    <h5>Company</h5>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur scelerisque, tortor nec mattis feugiat, velit purus euismod odio, quis vulputate velit urna.</p>
-                    <p><a href="mailto:sales@theseocompany.com" className="external-links">sales@theseocompany.com</a></p>
-                    </div>
+                
+                   
                 </div> 
                 <div className="divider"></div>
                 <div className="row">
@@ -97,11 +114,10 @@ export default function GuestAuthLayouth(){
                         <a href="#"><i className="icon ion-logo-youtube"></i></a>
                     </div>
                     <div className="col-md-6 col-xs-12">
-                        {/* <small>2018 &copy; All rights reserved. Made by <a href="http://templune.com/" target="blank" className="external-links">Templune</a></small> */}
                     </div>
                 </div>
                 </div>
             </footer>
         </div>
       )
-    }
+        }

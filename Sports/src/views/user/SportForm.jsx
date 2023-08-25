@@ -9,7 +9,7 @@ export default function SportForm(){
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState(null)
   const navigate = useNavigate()
-  const {setNotification} = useStateContext()
+  const {notification, setNotification} = useStateContext()
   
   const [sport, setSport] = useState({
     id:null,
@@ -74,6 +74,10 @@ export default function SportForm(){
                   <p key={key}>{errors[key][0]}</p>
               ))}
               </div>}
+              {notification && 
+                <div className="alert">
+                    <p>{notification}</p>
+                </div>}
 
               {!loading &&
                 <form onSubmit={onSubmit}>

@@ -30,7 +30,7 @@ input,select {
     margin: 0 0 10px;
     padding: 15px;
     box-sizing: border-box;
-    font-size: 12px;
+    font-size: 14px;
     transition: all 0.3s;
 }
 select{
@@ -189,22 +189,23 @@ table > tbody > tr > td {
 }
 
 #defaultLayout aside {
-    width: 240px;
+    width: 150px;
     background-color: #5b08a7;
-    padding: 1rem
+    padding: 1rem;
 }
-
-#defaultLayout aside > a {
+aside > div > a{
     display: block;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 6px;
     color: white;
     text-decoration: none;
     transition: all 0.2s;
 }
 
-#defaultLayout aside > a:hover {
+
+ aside > div >a:hover {
     background-color: rgba(0, 0, 0, 0.2);
+    text-decoration: none;
 }
 
 #defaultLayout .content {

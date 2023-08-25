@@ -11,8 +11,6 @@ export default function Dashbard(){
            <h4 className="message">Role:{user.role}</h4>
 
           </div>
-        
-
            <div className="profile-container">
            <div className="card">
               <img src="./assets/avater.jpg" alt="image" height={200} width={200}/>

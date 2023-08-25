@@ -59,6 +59,10 @@ const router = createBrowserRouter([
             },
             {
                 path:'/users/:id',
+                element:<EditUserForm key="userUpdate"/>
+            },
+            {
+                path:'/all-users/:id',
                 element:<UserForm key="userUpdate"/>
             },
             {

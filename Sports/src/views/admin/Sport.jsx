@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
 import axiosClient from "../../axios-client.js";
 import { Link } from "react-router-dom";
-//import {useStateContext} from "../context/ContextProvider.jsx";
+// import {useStateContext} from "../context/ContextProvider.jsx";
 
 
 
 export default function Sports(){
+  
 
 const [sports, setSports] = useState([]);
 const [loading, setLoading] = useState(false);

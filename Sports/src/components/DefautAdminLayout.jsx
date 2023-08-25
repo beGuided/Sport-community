@@ -42,14 +42,27 @@ const onLogout = (ev) =>{
 return (
         <div id="defaultLayout" >
             <aside>
-                
-                  {/* links for only Admin  start*/}
-                    <Link to="/dashboard">Dashboard</Link> 
-                <Link to="/users">Users</Link>
+               <div>
+               <Link to="/dashboard">Dashboard</Link> 
+               
+                </div> 
+           
+             {/* links for only Admin  start*/}
+            {user.role === 'admin' && (
+                <div>
+                <Link to="/users">Users</Link><br></br>
                 <Link to="/sports">Sports</Link>
-                {/* links for only Admin  end*/}
-
-                {/* <Link to="/password/forgot-password">Change Password</Link> */} 
+                </div>
+            )}
+            {/* end */}
+                
+            {user.role === 'user' && (
+                <div>
+              <Link to={'/users/'+user.id}>Edit Profile</Link> 
+              
+                </div>
+            )}
+             
               
             </aside>
             <div className="content">
@@ -61,7 +74,8 @@ return (
                 }
                 <header>
                     <div>
-                        Header
+                    <Link to="/home">Home</Link><br></br>
+                    
                     </div>
                     <div>
                        {user.name}

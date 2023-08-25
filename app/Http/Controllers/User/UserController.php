@@ -38,10 +38,12 @@ class UserController extends Controller
     public function update(Request $request)
     {
             $request->validate([
+            // 'name' => 'string',
+            // 'user_name' => 'string',
+            // 'email' => 'string',
             'name' => 'string',
-            'user_name' => 'string',
-            'email' => 'string',
-            'interest' => 'nullable'
+            'email' => ['nullable','email', Rule::unique('users', 'email')],
+            'user_name' => ['nullable', Rule::unique('users', 'user_name')],
             
         ]);
 

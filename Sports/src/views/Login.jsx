@@ -55,7 +55,7 @@ export default function Login(){
                 setError('Please check your email for verification link');
                 } 
                if(response && response.status === 401){
-                setError('invalid login credientials');
+                setError(response.data.message);
              } 
            })
     }

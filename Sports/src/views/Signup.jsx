@@ -12,11 +12,12 @@ export default function Signup(){
     const passwordRef = useRef();
     const passwordConfirmationRef = useRef();
 
-    const{setUser,notification, setToken,setNotification} = useStateContext(); 
+    const{setUser, setToken,} = useStateContext(); 
     const [errors, setErrors] = useState(null);
     const [sports, setSports] = useState([]);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [notification, setNotification] = useState('')
     const [selectedSports, setSelectedSports] = useState([]);
 
 
@@ -99,11 +100,11 @@ export default function Signup(){
         {Object.keys(errors).map(key => (
             <p key={key}>{errors[key][0]}</p>
         ))}
+        </div>}
 
-      {notification && 
+        {notification && 
         <div className="alert">
             <p>{notification}</p>
-        </div>}
         </div>}
 
       <input required ref={ nameRef }placeholder="Full Name"/> 

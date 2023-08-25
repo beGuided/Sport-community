@@ -30,7 +30,7 @@ class AuthController extends Controller
             'name' => 'required',
             'interest' => 'nullable',
             'email' => ['required', 'email', Rule::unique('users', 'email')],
-            'user_name' => ['required', Rule::unique('users', 'user_name')],
+            'user_name' => ['nullable', Rule::unique('users', 'user_name')],
             'password' => 'required|min:6|confirmed',
             'phone_number' => ['required','max:20',Rule::unique('users', 'phone_number')],
         ]);

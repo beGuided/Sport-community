@@ -53,6 +53,8 @@ const getUsers = () => {
                 <tr>
                   <th> ID</th>
                   <th> Name</th>
+                  <th> User Name</th>
+                  <th> F-Number</th>
                   <th> Email</th>
                   <th>Create Date</th>
                   <th>Acions</th>
@@ -76,10 +78,12 @@ const getUsers = () => {
                   <tr key={user.id}>
                     <td>{user.id}</td>
                     <td>{user.name}</td>
+                    <td>{user.user_name}</td>
+                    <td>{user.phone_number}</td>
                     <td>{user.email}</td>
                     <td>{user.created_at}</td>
                     <td>
-                      <Link className="btn-edit" to={'/users/'+user.id}>Edit</Link> &nbsp;&nbsp;
+                      <Link className="btn-edit" to={'/all-users/'+user.id}>Edit</Link> &nbsp;&nbsp;
                       <button className="btn-delete" onClick={ ev => onDelete(user)} > Delete</button>
                     </td>
                   </tr>
