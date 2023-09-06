@@ -27,7 +27,7 @@ export default function Dashbard(){
               </ul>
 
               <ul>
-              {/* {user.interest.map(user=>(
+              {/* {user.sports.map(user=>(
                 <li>{user[0]}</li>
 
               ))} */}

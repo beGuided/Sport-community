@@ -1,7 +1,7 @@
-import {Outlet,Link,Navigate} from "react-router-dom";
+import {Outlet, Link, useNavigate, useSearchParams} from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios-client";
-import {useEffect} from "react"
+import {useEffect, useState} from "react"
 
 
 
@@ -9,7 +9,65 @@ import {useEffect} from "react"
 
 export default function GuestAuthLayouth(){
 
-    const {user, setUser,setToken}  = useStateContext();
+    const {user, setUser,setToken,setNotification}  = useStateContext();
+    const [error, setError]=useState(null)
+    const navigate = useNavigate();
+
+    
+  //
+  //
+  //
+  // Handle verification
+  //
+
+    let [searchParams] = useSearchParams();
+    // Getting params and query
+    const signature = searchParams.get("signature");
+    const expire = searchParams.get("expires");
+    const verify = searchParams.get("email_verify_url");
+    const token = localStorage.getItem("token");
+
+    const handleSubmit = async (e) => {
+      const formData = new FormData();
+      formData.append("eemail_verify_urlpires", expire);
+      formData.append("signature", signature);
+
+      if ((verify === "") | (verify === null)) {
+        return null;
+      } else {
+        try {
+          // Send the form data to the server
+          const response = await axios(`${verify}&signature=${signature}`, {
+            headers: { Authorization: "Bearer " + token },
+          });
+          if (response.data.status === true) {
+            console.log(response);
+            setNotification("Email verified Successfully.");
+  
+            setTimeout(() => {
+                localStorage.removeItem("token");
+              navigate("/login");
+              
+            }, 2500);
+          } else {
+            setError(response.data.message);
+            console.log(response);
+          }
+        } catch (error) {
+          console.error(error);
+          // toast.error(error.response.data.message);
+          error.message === "Network Error"
+            ? setError(error.message)
+            : setError(error.response.data.message);
+        }
+      }
+      // }
+    };
+
+    useEffect(() => {
+        const su = () => handleSubmit();
+        su();
+      }, []);
    
   
     const onLogout = (ev) =>{

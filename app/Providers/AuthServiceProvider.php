@@ -32,7 +32,7 @@ class AuthServiceProvider extends ServiceProvider
 
         
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
-            // $spaUrl = "http://spa.test?email_verify_url=".$url;
+            $spaUrl = env('FRONT_URL').'?email_verify_url='.$url;
  
              return (new MailMessage)
                  ->subject('Verify Email Address')
@@ -41,7 +41,7 @@ class AuthServiceProvider extends ServiceProvider
          });
 
          ResetPassword::createUrlUsing(function (User $user, string $token) {
-            return 'https://example.com/reset-password?token='.$token;
+            return env('FRONT_URL').'/reset-password?token='.$token;
         });
 
          

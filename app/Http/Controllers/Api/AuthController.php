@@ -28,20 +28,19 @@ class AuthController extends Controller
   
         $formFields = $request->validate([
             'name' => 'required',
-            'interest' => 'nullable',
-            'email' => ['required', 'email', Rule::unique('users', 'email')],
-            'user_name' => ['nullable', Rule::unique('users', 'user_name')],
+            'email' => 'required|unique:users',
+            'user_name' => 'required|unique:users',
             'password' => 'required|min:6|confirmed',
-            'phone_number' => ['required','max:20',Rule::unique('users', 'phone_number')],
+            'phone_number' => 'required|max:20|unique:users',
+            
         ]);
 
         // Hash Password
         $formFields['password'] = bcrypt($formFields['password']);
         $user = User::create($formFields);
 
-        if ($request->has('interest')) {
-            $interest = Sport::whereIn('id', $request->interest)->get();
-            $user->sports()->sync($interest);
+        if ($request->has('sports')) {
+            $user->sports()->attach($request->input('sports'));
         }
 
         event(new Registered($user));
@@ -49,12 +48,11 @@ class AuthController extends Controller
        
         $response = [
             'message' => 'Registration successful. Please check your email for verification link.',
-             'user'=> $formFields,
-             'token' => $token   ];
+             'user'=> $user,
+             'token' => $token ];
         return response($response, 201); 
 
     }
-
 
     
     public function verifyEmail($id, $hash)
@@ -70,7 +68,6 @@ class AuthController extends Controller
             return response(['message' => 'Email verified', 'status'=>true ]);
         
     }
-
 
     // login in with emailand password
       public function login(Request $request) {

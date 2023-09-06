@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Sport;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Validation\Rules\Unique;
 
 class SportController extends Controller
 {
@@ -30,7 +30,7 @@ class SportController extends Controller
 
 
     public function store(Request $request){
-        $request->validate([ 'name' => 'required|string' ]);
+        $request->validate([ 'name' => 'required|string|unique:sports' ]);
       
         $newSport = Sport::create([
             'name'=>$request->name
